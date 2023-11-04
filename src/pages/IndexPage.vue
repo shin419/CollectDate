@@ -10,8 +10,21 @@
         </q-icon>
       </template>
     </q-input>
-    <div class="q-mt-xs">Ngày âm: {{lunarDate}}</div>
-    <div>Số ngày: {{dateNumber}}</div>
+    <div class="row q-mt-xs justify-between">
+      <div>Ngày âm:</div>
+      <div>{{lunarDate}}</div>
+    </div>
+    
+    <div class="row q-mt-xs justify-between">
+      <div>Năm tiếp thep:</div>
+      <div>{{namAm}}</div>
+    </div>
+
+    <div class="row q-mt-xs justify-between">
+      <div>Số ngày:</div>
+      <div>{{dateNumber}}</div>
+    </div>
+
     <q-input v-model="input" placeholder="Nhập số ngày" square outlined dense class="q-my-sm" type="number" @update:model-value="convertDateFromNumber"/>
     <div>{{ketQua}}</div>
   </q-page>
@@ -26,9 +39,10 @@ export default defineComponent({
   name: 'IndexPage',
   data () {
     return {
-      input: null,
+      input: 100,
       ketQua: null,
-      date: "2023-08-21"
+      date: "2023-08-21",
+      soNam: 1
     }
   },
   computed: {
@@ -40,6 +54,11 @@ export default defineComponent({
       let date = new Date(this.date)
       let ngayAm = lunar.Solar.fromYmd(date.getFullYear(), date.getMonth() + 1, date.getDate()).getLunar()
       return `${ngayAm.getDay()}/${ngayAm.getMonth()}/${ngayAm.getYear()}`
+    },
+    namAm () {
+      let fotmatDate = new Date(this.date)
+      let date = lunar.Lunar.fromYmd(fotmatDate.getFullYear() + this.soNam, fotmatDate.getMonth() + 1, fotmatDate.getDate()).getSolar()
+      return `${date.getDay()}/${date.getMonth()}/${date.getYear()}`
     }
   },
   methods: {
@@ -50,6 +69,9 @@ export default defineComponent({
       let valueLichAm = ` - Lịch âm: ${ngayAm.getDay()}/${ngayAm.getMonth()}/${ngayAm.getYear()}`
       this.ketQua = "Lịch dương: " + date.format("DD/MM/YYYY") + valueLichAm
     }
+  },
+  created () {
+    this.convertDateFromNumber()
   }
 })
 </script>
